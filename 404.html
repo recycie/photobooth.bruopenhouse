@@ -1,0 +1,63 @@
+
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Page not found | 404</title>
+</head>
+
+<style>
+@import url("https://fonts.googleapis.com/css?family=Roboto+Mono:300,500");
+
+body {
+    background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
+    background-size: 400% 400%;
+    animation: gradient 15s ease infinite;
+    font-family: "Roboto Mono", "Liberation Mono", Consolas, monospace;
+    color: rgba(255, 255, 255, 0.87);
+}
+@keyframes gradient {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+.container,
+.container > .row,
+.container > .row > div {
+    height: 100%;
+}
+
+#countUp {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+.number {
+    font-size: 12rem;
+    font-weight: 500;
+}
+.text {
+    margin: 0 0 1rem;
+    font-weight: 300;
+    text-align: center;
+}
+
+</style>
+<div class="container">
+    <div class="row">
+            <div id="countUp">
+                <div class="number" data-count="404">404</div>
+                <div class="text">Page not found</div>
+                <div class="text">This may not mean anything.</div>
+                <div class="text">I'm probably working on something that has blown up.</div>
+            </div>
+    </div>
+</div>            

@@ -1,0 +1,17 @@
+ErrorDocument 403 /error.php
+ErrorDocument 404 /error.php
+ErrorDocument 500 /error.php
+<Files .htaccess>
+	Order allow,deny
+	Deny from all
+</Files>
+
+<Files *.txt>
+    Order Deny,Allow
+    Deny from all
+</Files>
+
+<Files *.html>
+    Order Deny,Allow
+    Deny from all
+</Files>
