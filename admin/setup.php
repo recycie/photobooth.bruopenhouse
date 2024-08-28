@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (isset($_SESSION['userid']) && $_SESSION['userid'] === 'admin'){
+if (!isset($_SESSION['userid']) && $_SESSION['userid'] != 'admin'){
     header('login.php');
 }
 
