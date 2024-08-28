@@ -2,6 +2,14 @@
 session_start();
 date_default_timezone_set('Asia/Bangkok');
 
+// Handle logout
+if (isset($_GET['logout'])) {
+    session_unset();
+    session_destroy();
+    header("Location: index.php");
+}
+
+
 if (isset($_SESSION['userid']) && $_SESSION['userid'] === 'admin'){
     header('login.php');
 }
@@ -28,13 +36,6 @@ if (isset($_GET['download'])) {
     } else {
         echo 'Error: Could not create the zip file.';
     }
-}
-
-// Handle logout
-if (isset($_GET['logout'])) {
-    session_unset();
-    session_destroy();
-    header("Location: index.php");
 }
 
 // Handle session expiration

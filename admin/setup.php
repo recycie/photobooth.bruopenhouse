@@ -58,7 +58,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
             <div class="hidden md:flex space-x-4">
                 <a href="index.php" class="hover:bg-gray-700 px-4 py-2 rounded">Home</a>
                 <a href="setup.php" class="hover:bg-gray-700 px-4 py-2 rounded">Setup</a>
-                <a href="?logout" class="hover:bg-gray-700 px-4 py-2 rounded">Logout</a>
+                <a href="index.php?logout" class="hover:bg-gray-700 px-4 py-2 rounded">Logout</a>
             </div>
             <button id="menu-toggle" class="md:hidden text-2xl">
                 <i class="fas fa-bars"></i>
@@ -67,7 +67,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
         <div id="menu" class="md:hidden bg-gray-800 text-white p-4 space-y-2 hidden">
             <a href="index.php" class="block hover:bg-gray-700 px-4 py-2 rounded">Home</a>
             <a href="setup.php" class="block hover:bg-gray-700 px-4 py-2 rounded">Setup</a>
-            <a href="?logout" class="block hover:bg-gray-700 px-4 py-2 rounded">Logout</a>
+            <a href="index.php?logout" class="block hover:bg-gray-700 px-4 py-2 rounded">Logout</a>
         </div>
     </nav>
 
