@@ -1,8 +1,8 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['userid']) && $_SESSION['userid'] != 'admin'){
-    header('login.php');
+if (!isset($_SESSION['userid']) || $_SESSION['userid'] != 'admin'){
+    header('Location: login.php');
 }
 
 include('../function.php');
