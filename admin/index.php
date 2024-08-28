@@ -6,9 +6,8 @@ date_default_timezone_set('Asia/Bangkok');
 if (isset($_GET['logout'])) {
     session_unset();
     session_destroy();
-    header("Location: index.php");
+    header("Location: login.php");
 }
-
 
 if (isset($_SESSION['userid']) && $_SESSION['userid'] === 'admin'){
     header('login.php');
