@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['userid']) || $_SESSION['userid'] != 'admin'){
+if (!isset($_SESSION['userid']) || $_SESSION['userid'] != 'admin') {
     header('Location: login.php');
 }
 
@@ -74,13 +74,20 @@ $config = loadConfig(CONFIGFILE_ADMIN);
     <main class="container mx-auto p-6">
         <section class="bg-gray-800 shadow-md rounded-lg p-6 mb-6">
             <div class="flex items-center space-x-4 mb-4">
-                <input type="file" id="frameImage" class="file-input px-4 py-2 border border-gray-600 rounded-lg shadow-sm bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
-                <button id="addRectangle" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">Add Rectangle</button>
-                <button id="removeRectangle" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">Remove Rectangle</button>
-                <button id="saveConfig" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">Save</button>
+                <input type="file" id="frameImage"
+                    class="file-input px-4 py-2 border border-gray-600 rounded-lg shadow-sm bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
+                <button id="addRectangle"
+                    class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">Add
+                    Rectangle</button>
+                <button id="removeRectangle"
+                    class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">Remove
+                    Rectangle</button>
+                <button id="saveConfig"
+                    class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">Save</button>
             </div>
-            
-            <div id="photo-booth-container" class="flex justify-between relative bg-gray-900 border border-gray-600 rounded-lg p-4">
+
+            <div id="photo-booth-container"
+                class="flex justify-between relative bg-gray-900 border border-gray-600 rounded-lg p-4">
                 <div id="photo-booth-frame" class="relative rounded-lg overflow-hidden bg-gray-800">
                     <!-- Configured areas will be added dynamically here -->
                 </div>
@@ -96,10 +103,12 @@ $config = loadConfig(CONFIGFILE_ADMIN);
     <canvas id="canvasx" class="hidden"></canvas>
 
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.js" integrity="sha512-DJw15+xxGmXB1/c6pvu2eRoVCGo5s6rdeswkFS4HLFfzNQSc6V71jk6t+eMYzlyakoLTwBrKnyhVc7SCDZOK4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.js"
+        integrity="sha512-DJw15+xxGmXB1/c6pvu2eRoVCGo5s6rdeswkFS4HLFfzNQSc6V71jk6t+eMYzlyakoLTwBrKnyhVc7SCDZOK4Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             <?php if ($config != null): ?>
                 var savedConfig = <?= json_encode($config) ?>;
             <?php else: ?>
@@ -167,23 +176,23 @@ $config = loadConfig(CONFIGFILE_ADMIN);
 
             function startCamera() {
                 navigator.mediaDevices.getUserMedia({
-                        video: true,
-                        deviceId: {
-                            exact: camera_device
-                        }
-                    })
-                    .then(function(stream) {
+                    video: true,
+                    deviceId: {
+                        exact: camera_device
+                    }
+                })
+                    .then(function (stream) {
                         cameraStream = stream;
                         video.srcObject = stream; // Set the video source to the stream
                     })
-                    .catch(function(error) {
+                    .catch(function (error) {
                         console.error('Error accessing camera: ', error);
                     });
             }
 
             function stopCamera() {
                 if (cameraStream) {
-                    cameraStream.getTracks().forEach(function(track) {
+                    cameraStream.getTracks().forEach(function (track) {
                         track.stop(); // Stop each track
                     });
                     video.srcObject = null; // Remove the stream from the video element
@@ -207,12 +216,12 @@ $config = loadConfig(CONFIGFILE_ADMIN);
             };
 
 
-            $('#frameImage').on('change', function(event) {
+            $('#frameImage').on('change', function (event) {
                 var file = event.target.files[0];
                 if (file) {
                     var reader = new FileReader();
 
-                    reader.onload = function(e) {
+                    reader.onload = function (e) {
                         frameBG.src = e.target.result
 
                         $('#photo-booth-frame').css('background-image', 'url(' + e.target.result + ')');
@@ -233,7 +242,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                 canvas_obj.classList.add('d-none');
                 ctx = canvas_obj.getContext("2d");
 
-                frameimg.onload = function() {
+                frameimg.onload = function () {
                     canvas_obj.width = frameimg.width;
                     canvas_obj.height = frameimg.height;
                 }
@@ -244,7 +253,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
             function drawImage(url, x, y, w, h) {
                 var img = new Image();
                 img.src = captureCamera();
-                img.onload = function() {
+                img.onload = function () {
                     ctx.drawImage(frameimg, 0, 0, canvas_obj.width, canvas_obj.height);
 
                     var aspectRatio = img.width / img.height;
@@ -268,7 +277,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
 
             function setupFrame() {
                 var img = new Image();
-                img.onload = function() {
+                img.onload = function () {
                     frameSize.width = img.width;
                     frameSize.height = img.height;
                     $('#photo-booth-frame').css({
@@ -299,7 +308,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                                 containment: "#photo-booth-frame",
                                 stop: updateConfig
                             });
-                            newRectangle.click(function() {
+                            newRectangle.click(function () {
                                 $('.photo-area').removeClass('selected');
                                 $(this).addClass('selected');
                             });
@@ -332,7 +341,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                     stop: updateConfig
                 });
 
-                newRectangle.click(function() {
+                newRectangle.click(function () {
                     $('.photo-area').removeClass('selected');
                     $(this).addClass('selected');
                 });
@@ -366,7 +375,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
 
             function updateConfig() {
                 let config = {};
-                $('.photo-area').each(function() {
+                $('.photo-area').each(function () {
                     let $this = $(this);
                     let position = $this.position();
 
@@ -380,18 +389,33 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                 });
             }
 
-            $('#saveConfig').click(function() {
+            $('#saveConfig').click(function () {
                 let config = {};
-                $('.photo-area').each(function() {
+
+                $('.photo-area').each(function () {
                     let $this = $(this);
                     let position = $this.position();
-                    config[this.id] = {
-                        top: position.top,
-                        left: position.left,
-                        width: $this.width(),
-                        height: $this.height()
-                    };
+                    if (position.top != 0 && position.left != 0 && $this.width() != 0 && $this.height() != 0) {
+                        config[this.id] = {
+                            top: position.top,
+                            left: position.left,
+                            width: $this.width(),
+                            height: $this.height()
+                        };
+                    }
                 });
+
+                if (Object.keys(config).length == 0) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'คุณยังไม่ได้สร้าง Rectangle',
+                        showCancelButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'ยืนยัน',
+                    });
+                    return
+                }
 
                 // Convert the frame image to a data URL
                 var frameImage = $('#photo-booth-frame').css('background-image').replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
@@ -400,7 +424,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                 if (frameImage) {
                     var img = new Image();
                     img.crossOrigin = 'Anonymous'; // Handle cross-origin images if necessary
-                    img.onload = function() {
+                    img.onload = function () {
                         var canvas = document.createElement('canvas');
                         var ctx = canvas.getContext('2d');
                         canvas.width = img.width;
@@ -409,34 +433,39 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                         imageData = canvas.toDataURL('image/png');
 
                         // Send the configuration and image data to the server
-                        $.post('setup.php', {
-                            config: JSON.stringify(config),
-                            image: imageData
-                        }, function(response) {
-                            console.log("Configuration and image saved:", response);
+                        $.post('', {
+                            config: JSON.stringify(config)
+                        }).done(function (response) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'DONE',
+                                showCancelButton: false,
+                                allowOutsideClick: false,
+                                allowEscapeKey: false,
+                                confirmButtonText: 'ยืนยัน',
+                            });
+                            console.log("Configuration saved:", response);
+                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                            console.error("Request failed:", textStatus, errorThrown);
                         });
                     };
                     img.src = frameImage;
                 } else {
                     // Send only the configuration if no image is set
-                    $.post('setup.php', {
-                        config: JSON.stringify(config)
-                    }, function(response) {
-                        Swal.fire({
-                            title: 'DONE',
-                            icon: 'success'
-                            showCancelButton: false,
-                            allowOutsideClick: false,
-                            allowEscapeKey: false,
-                            confirmButtonText: 'ยืนยัน',
-                        })
-                        console.log("Configuration saved:", response);
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'เลือกรูปก่อนบันทึกข้อมูล',
+                        showCancelButton: false,
+                        allowOutsideClick: false,
+                        allowEscapeKey: false,
+                        confirmButtonText: 'ยืนยัน',
                     });
                 }
             });
 
 
         });
+
     </script>
 
 </body>

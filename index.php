@@ -445,7 +445,6 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             imgs = canvas_obj.toDataURL("image/png");
 
             if (bg_size >= imgs.length) {
-                Cookies.set('device', 3);
                 location.reload();
             } else {
                 export_status = true;
