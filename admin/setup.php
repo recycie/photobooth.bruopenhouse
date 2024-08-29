@@ -77,8 +77,9 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                 <input type="file" id="frameImage" class="file-input px-4 py-2 border border-gray-600 rounded-lg shadow-sm bg-gray-700 text-gray-100 focus:outline-none focus:ring-2 focus:ring-blue-500 transition" />
                 <button id="addRectangle" class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700 transition">Add Rectangle</button>
                 <button id="removeRectangle" class="bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition">Remove Rectangle</button>
+                <button id="saveConfig" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">Save</button>
             </div>
-
+            
             <div id="photo-booth-container" class="flex justify-between relative bg-gray-900 border border-gray-600 rounded-lg p-4">
                 <div id="photo-booth-frame" class="relative rounded-lg overflow-hidden bg-gray-800">
                     <!-- Configured areas will be added dynamically here -->
@@ -89,7 +90,6 @@ $config = loadConfig(CONFIGFILE_ADMIN);
             </div>
         </section>
 
-        <button id="saveConfig" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition">Save Configuration</button>
     </main>
 
     <video id="video" class="hidden" autoplay></video>
@@ -422,6 +422,14 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                     $.post('setup.php', {
                         config: JSON.stringify(config)
                     }, function(response) {
+                        Swal.fire({
+                            title: 'DONE',
+                            icon: 'success'
+                            showCancelButton: false,
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            confirmButtonText: 'ยืนยัน',
+                        })
                         console.log("Configuration saved:", response);
                     });
                 }
