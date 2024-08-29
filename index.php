@@ -22,11 +22,17 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>BRU Open House | Project v8.1259</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css" integrity="sha512-CpIKUSyh9QX2+zSdfGP+eWLx23C8Dj9/XmHjZY2uDtfkdLGo0uY12jgcnkX9vXOgYajEKb/jiw67EYm+kBf+6g==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"
+        integrity="sha512-CpIKUSyh9QX2+zSdfGP+eWLx23C8Dj9/XmHjZY2uDtfkdLGo0uY12jgcnkX9vXOgYajEKb/jiw67EYm+kBf+6g=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css" integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
+        integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
     <link rel="stylesheet" href="css/main.css">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.js" integrity="sha512-CX7sDOp7UTAq+i1FYIlf9Uo27x4os+kGeoT7rgwvY+4dmjqV0IuE/Bl5hVsjnQPQiTOhAX1O2r2j5bjsFBvv/A==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.js"
+        integrity="sha512-CX7sDOp7UTAq+i1FYIlf9Uo27x4os+kGeoT7rgwvY+4dmjqV0IuE/Bl5hVsjnQPQiTOhAX1O2r2j5bjsFBvv/A=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script src="https://unpkg.com/css-doodle@0.15.3/css-doodle.min.js"></script>
     <style>
@@ -98,10 +104,13 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         "luminosity" => "luminosity",
     ];
     ?>
-    <css-doodle use="var(--rule)" class="d-none" id="doodle" style="position: absolute;mix-blend-mode: <?= $items[array_rand($items)] ?>;opacity: 0.5;"></css-doodle>
+    <css-doodle use="var(--rule)" class="d-none" id="doodle"
+        style="position: absolute;mix-blend-mode: <?= $items[array_rand($items)] ?>;opacity: 0.5;"></css-doodle>
     <div class="h-100 d-flex align-items-center justify-content-center flex-column d-none" id="d">
 
-        <button class="button is-large is-responsive is-primary is-light title" id="btn-start" style="font: 2.5rem sans-serif;color: transparent;font-weight: 800;letter-spacing: 2px;position: relative;border-width: 1px;border-style: solid;border-image: radial-gradient(70% 6000% at 50% 100%,#bd3ff6 0,#66d9fb 60%) 1;background: radial-gradient(70% 6000% at 50% 100%,#bd3ff6 0,#66d9fb 60%);-webkit-background-clip: text;-webkit-animation: text 1.5s 1;"><i class="fa-solid fa-camera fa-xl fa-pull-left"> </i>S T A R T</button>
+        <button class="button is-large is-responsive is-primary is-light title" id="btn-start"
+            style="font: 2.5rem sans-serif;color: transparent;font-weight: 800;letter-spacing: 2px;position: relative;border-width: 1px;border-style: solid;border-image: radial-gradient(70% 6000% at 50% 100%,#bd3ff6 0,#66d9fb 60%) 1;background: radial-gradient(70% 6000% at 50% 100%,#bd3ff6 0,#66d9fb 60%);-webkit-background-clip: text;-webkit-animation: text 1.5s 1;"><i
+                class="fa-solid fa-camera fa-xl fa-pull-left"> </i>S T A R T</button>
         <span class="xloader d-none" id="wl"></span>
         <span class="start-loader d-none" id="start-loader"></span>
 
@@ -128,7 +137,9 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         </div>
     </div>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.js" integrity="sha512-DJw15+xxGmXB1/c6pvu2eRoVCGo5s6rdeswkFS4HLFfzNQSc6V71jk6t+eMYzlyakoLTwBrKnyhVc7SCDZOK4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/js-cookie/3.0.1/js.cookie.js"
+        integrity="sha512-DJw15+xxGmXB1/c6pvu2eRoVCGo5s6rdeswkFS4HLFfzNQSc6V71jk6t+eMYzlyakoLTwBrKnyhVc7SCDZOK4Q=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="js/qrcode.min.js"></script>
     <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="js/feather.min.js"></script>
@@ -156,7 +167,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         }
 
         const max_picture = Object.keys(config).length;
-        $('#pic-count').text('0/'+max_picture) 
+        $('#pic-count').text('0/' + max_picture)
         var take_ = 0;
         var suggest_msg = '';
         var imgobj_1 = new Image();
@@ -180,13 +191,13 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             return new Promise(resolve => setTimeout(resolve, time));
         }
 
-        $(document).keydown(function(event) {
+        $(document).keydown(function (event) {
             if (event.ctrlKey && event.keyCode == 116) {
                 Cookies.remove('device');
             }
         });
 
-        document.onreadystatechange = async function() {
+        document.onreadystatechange = async function () {
             if (document.readyState !== "complete") {
                 nload.classList.add('d-none');
             } else {
@@ -302,10 +313,14 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             play.classList.add('d-none');
             nload.classList.add('d-none');
             wl.classList.remove('d-none');
-            const stream = await navigator.mediaDevices.getUserMedia(constraints);
-            handleStream(stream);
-        };
 
+            try {
+                const stream = await navigator.mediaDevices.getUserMedia(constraints);
+                handleStream(stream);
+            } catch (error) {
+                console.error('Error accessing media devices.', error);
+            }
+        };
 
         const handleStream = async (stream) => {
             video.srcObject = stream;
