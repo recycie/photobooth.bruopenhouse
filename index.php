@@ -146,7 +146,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
     <script language="JavaScript">
         const config = <?= json_encode($config) ?>;
-        const shootCountdown = 3;
+        const shootCountdown = <?= SHOTCOUNTDOWN ?>;
 
         if (config == null) {
             Swal.fire({
@@ -169,7 +169,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         const max_picture = Object.keys(config).length;
         $('#pic-count').text('0/' + max_picture)
         var take_ = 0;
-        var suggest_msg = '';
+        /* var suggest_msg = ''; */
         var imgobj_1 = new Image();
         var imgobj_2 = new Image();
         var imgobj_3 = new Image();
@@ -261,10 +261,9 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 canvas.height = video.videoHeight;
 
                 // Filter Apply
-
                 canvas.getContext('2d').filter = 'brightness(1.1) contrast(1.2) saturate(1.3) sharpen(1.1)';;
                 // canvas.getContext('2d').translate(canvas.width, 0);
-                // canvas.getContext('2d').scale(-1,1);
+                // canvas.getContext('2d').scale(-1,1); 
                 canvas.getContext('2d').drawImage(video, 0, 0);
 
                 cdisplay.classList.add('blur');
@@ -510,7 +509,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                                     Swal.showLoading()
                                     const b = Swal.getHtmlContainer().querySelector('b')
                                     let qrcode = new QRCode(document.getElementById("qrcode"), {
-                                        text: "<?= $_SERVER["REQUEST_SCHEME"] ?>://<?= $_SERVER["HTTP_HOST"] ?>/<?= trim(parse_url(dirname($_SERVER['REQUEST_URI']), PHP_URL_PATH), '/') ?>download.php?id=" + res['msg'],
+                                        text: "<?= ENPOINT_URL_DOWNLOAD ?>/download.php?id=" + res['msg'],
                                         width: 150,
                                         height: 150,
                                         colorDark: "#363636",

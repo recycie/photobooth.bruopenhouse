@@ -94,7 +94,7 @@ krsort($new_images);
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <?php foreach ($new_images as $image): ?>
                 <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg relative">
-                    <a href="<?= htmlspecialchars($_SERVER["REQUEST_SCHEME"] . "://" . $_SERVER["HTTP_HOST"] . "/download.php?id=" . basename($image, ".png")) ?>">
+                    <a href="<?= ENPOINT_URL_DOWNLOAD . "/download.php?id=" . basename($image, ".png") ?>">
                         <img class="lazyload w-full h-auto" src="<?= htmlspecialchars($image) ?>" alt="Image">
                         <div class="absolute top-40 left-1/2 transform -translate-x-1/2 card p-3 bg-white rounded-lg shadow-lg">
                             <div id="qrcode-<?= htmlspecialchars(basename($image, ".png")) ?>" v-loading="PanoramaInfo.bgenerateing">

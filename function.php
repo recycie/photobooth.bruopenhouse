@@ -1,7 +1,5 @@
 <?php
-define('CONFIGFILE', 'config.json');
-define('CONFIGFILE_ADMIN', '../config.json');
-
+include("config.php");
 function loadConfig($CONFIGFILE){
     return file_exists($CONFIGFILE) ? json_decode(file_get_contents($CONFIGFILE), true) : null;
 }
