@@ -1,17 +1,26 @@
 <?php
+// ปิดการเข้าถึงสคริปต์นี้หากไม่จำเป็น
 // die("Access Denied");
+
+// เริ่มต้นเซสชัน
 session_start();
+
+// นำเข้าไฟล์ฟังก์ชัน
 include('function.php');
 
-function generateRandomString($length = 10)
-{
-    return substr(str_shuffle(str_repeat($x = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ', ceil($length / strlen($x)))), 1, $length);
-}
+// โหลดการตั้งค่าจากไฟล์คอนฟิก
 $config = loadConfig(CONFIGFILE);
 
+// กำหนดเส้นทางของรูปภาพที่ใช้เป็นพื้นหลัง
 $impath = "images/frame.png";
+
+// ดึงประเภทไฟล์ของรูปภาพ
 $type = pathinfo($impath, PATHINFO_EXTENSION);
+
+// อ่านข้อมูลจากไฟล์รูปภาพ
 $data = file_get_contents($impath);
+
+// แปลงข้อมูลรูปภาพเป็นรูปแบบ Base64
 $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
 ?>
@@ -22,18 +31,29 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <title>BRU Open House | Project v8.1259</title>
+
+    <!-- นำเข้า CSS จาก Bootstrap -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.2.2/css/bootstrap.min.css"
         integrity="sha512-CpIKUSyh9QX2+zSdfGP+eWLx23C8Dj9/XmHjZY2uDtfkdLGo0uY12jgcnkX9vXOgYajEKb/jiw67EYm+kBf+6g=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+    <!-- นำเข้า CSS จาก Bulma -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
+
+    <!-- นำเข้า FontAwesome สำหรับไอคอน -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.0/css/all.min.css"
         integrity="sha512-xh6O/CkQoPOWDdYTDqeRdPCVd1SpvCA9XXcUnZS2FmJNp1coAFzvtCN9BmamE+4aHK8yyUHUSCcJHgXloTyT2A=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <link rel="stylesheet" href="css/main.css">
+
+    <!-- นำเข้า CSS หลัก -->
+    <link rel="stylesheet" href="/css/main.css">
+
+    <!-- นำเข้า jQuery -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.1/jquery.js"
         integrity="sha512-CX7sDOp7UTAq+i1FYIlf9Uo27x4os+kGeoT7rgwvY+4dmjqV0IuE/Bl5hVsjnQPQiTOhAX1O2r2j5bjsFBvv/A=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
+    <!-- นำเข้า css-doodle -->
     <script src="https://unpkg.com/css-doodle@0.15.3/css-doodle.min.js"></script>
     <style>
         body {
@@ -45,7 +65,13 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             display: flex;
             align-items: center;
             justify-content: center;
-            /* contain: content; */
+        }
+
+        .swal2-popup {
+            width: 69rem !important;
+            /* Adjust the width as needed */
+            max-width: 100% !important;
+            /* Ensure it doesn't exceed the viewport width */
         }
 
         css-doodle {
@@ -77,7 +103,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 animation-delay: calc(-300s / @I * @i);
 
                 @keyframes scale-up {
-                    0%, 95.01%, 100% {
+                    0%, 95%, 100% {
                         transform: translateZ(0) rotate(0);
                         opacity: 0;
                     }
@@ -96,6 +122,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
 <body>
     <?php
+    // กำหนดตัวเลือกการผสมสีของวัตถุ doodle
     $items = [
         "empty" => "",
         "difference" => "difference",
@@ -104,20 +131,26 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         "luminosity" => "luminosity",
     ];
     ?>
+    <!-- css-doodle สำหรับการแสดงกราฟิก -->
     <css-doodle use="var(--rule)" class="d-none" id="doodle"
         style="position: absolute;mix-blend-mode: <?= $items[array_rand($items)] ?>;opacity: 0.5;"></css-doodle>
+
+    <!-- ส่วนของ UI หลัก -->
     <div class="h-100 d-flex align-items-center justify-content-center flex-column d-none" id="d">
 
+        <!-- ปุ่มเริ่มต้นการใช้งาน -->
         <button class="button is-large is-responsive is-primary is-light title" id="btn-start"
-            style="font: 2.5rem sans-serif;color: transparent;font-weight: 800;letter-spacing: 2px;position: relative;border-width: 1px;border-style: solid;border-image: radial-gradient(70% 6000% at 50% 100%,#bd3ff6 0,#66d9fb 60%) 1;background: radial-gradient(70% 6000% at 50% 100%,#bd3ff6 0,#66d9fb 60%);-webkit-background-clip: text;-webkit-animation: text 1.5s 1;"><i
-                class="fa-solid fa-camera fa-xl fa-pull-left"> </i>S T A R T</button>
+            style="font: 2.5rem sans-serif;color: transparent;font-weight: 800;letter-spacing: 2px;position: relative;border-width: 1px;border-style: solid;border-image: radial-gradient(70% 6000% at 50% 100%,#bd3ff6 0,#66d9fb 60%) 1;background: radial-gradient(70% 6000% at 50% 100%,#bd3ff6 0,#66d9fb 60%);-webkit-background-clip: text;-webkit-animation: text 1.5s 1;">
+            <i class="fa-solid fa-camera fa-xl fa-pull-left"> </i>S T A R T</button>
         <span class="xloader d-none" id="wl"></span>
         <span class="start-loader d-none" id="start-loader"></span>
 
+        <!-- การแสดงผลวิดีโอ -->
         <div class="display-cover d-none" id="cdisplay">
             <video autoplay></video>
             <canvas class="d-none"></canvas>
 
+            <!-- ตัวเลือกกล้อง -->
             <div class="video-options d-none">
                 <select name="" id="" class="custom-select">
                     <option value=""></option>
@@ -125,13 +158,16 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             </div>
         </div>
 
+        <!-- ปุ่มถ่ายภาพ -->
         <div class="d-none" id="ts">
             <button class="take-screenshot" id="take-pic"></button>
         </div>
 
+        <!-- แสดงภาพที่ถ่าย -->
         <div class="pic-left d-none" id="pic"></div>
         <span class="d-none" style="color:white;" id="pic-count"></span>
 
+        <!-- การนับถอยหลัง -->
         <div class="overlay">
             <span id="take-cd" class="fw-bold" style="font-size: 18rem; color: white;"></span>
         </div>
@@ -145,9 +181,11 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
     <script src="js/feather.min.js"></script>
 
     <script language="JavaScript">
+        // รับค่าการตั้งค่าและเวลานับถอยหลังจาก PHP
         const config = <?= json_encode($config) ?>;
         const shootCountdown = <?= SHOTCOUNTDOWN ?>;
 
+        // ตรวจสอบว่าการตั้งค่ากรอบรูปยังไม่ได้ถูกตั้งค่า
         if (config == null) {
             Swal.fire({
                 title: 'คำเตือน',
@@ -155,21 +193,21 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 icon: 'warning',
                 confirmButtonText: 'ตกลง',
                 confirmButtonColor: '#3085d6',
-                timer: 3000, // Optional: Close the alert automatically after 5 seconds
-                allowOutsideClick: false, // Prevent closing by clicking outside
-                allowEscapeKey: false, // Optional: Prevent closing with the ESC key
+                timer: 3000, // ปิดการแจ้งเตือนโดยอัตโนมัติหลังจาก 3 วินาที
+                allowOutsideClick: false, // ป้องกันการปิดโดยการคลิกนอกหน้าต่าง
+                allowEscapeKey: false, // ป้องกันการปิดด้วยปุ่ม ESC
             }).then((result) => {
                 if (result.isConfirmed || result.dismiss === Swal.DismissReason.timer) {
-                    // Redirect to the specified URL
+                    // เปลี่ยนเส้นทางไปยัง URL ที่กำหนด
                     window.location.href = 'admin/setup.php';
                 }
             });
         }
-
+        // กำหนดจำนวนภาพสูงสุดตามการตั้งค่า
         const max_picture = Object.keys(config).length;
         $('#pic-count').text('0/' + max_picture)
         var take_ = 0;
-        /* var suggest_msg = ''; */
+        // สร้างออบเจ็กต์ภาพ
         var imgobj_1 = new Image();
         var imgobj_2 = new Image();
         var imgobj_3 = new Image();
@@ -182,7 +220,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         var imgobj_10 = new Image();
         imgobj_1.src = "<?= $base64 ?>";
 
-
+        // อาร์เรย์เก็บภาพและออบเจ็กต์สำหรับการควบคุม
         let arr_pic = [];
         let nload = document.getElementById('start-loader');
         let bodyhidden = document.getElementById('d');
@@ -191,13 +229,13 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             return new Promise(resolve => setTimeout(resolve, time));
         }
 
-        $(document).keydown(function (event) {
+        $(document).keydown(function(event) {
             if (event.ctrlKey && event.keyCode == 116) {
                 Cookies.remove('device');
             }
         });
 
-        document.onreadystatechange = async function () {
+        document.onreadystatechange = async function() {
             if (document.readyState !== "complete") {
                 nload.classList.add('d-none');
             } else {
@@ -232,7 +270,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             }
         };
 
-
+        // เริ่มการสตรีมวิดีโอเมื่อคลิกปุ่มเริ่ม
         play.onclick = () => {
             if ('mediaDevices' in navigator && navigator.mediaDevices.getUserMedia) {
                 const updatedConstraints = {
@@ -244,7 +282,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 startStream(updatedConstraints);
             }
         };
-
+        // ฟังก์ชันสำหรับถ่ายภาพ
         const doScreenshot = async () => {
             var start_loader = document.getElementById('wl');
 
@@ -260,7 +298,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 canvas.width = video.videoWidth;
                 canvas.height = video.videoHeight;
 
-                // Filter Apply
+                // ปรับปรุงฟิลเตอร์สำหรับภาพ
                 canvas.getContext('2d').filter = 'brightness(1.1) contrast(1.2) saturate(1.3) sharpen(1.1)';;
                 // canvas.getContext('2d').translate(canvas.width, 0);
                 // canvas.getContext('2d').scale(-1,1); 
@@ -274,7 +312,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 Swal.fire({
                     html: '<small>' + count_picture + '/' + max_picture + '</small>',
                     imageUrl: canvas.toDataURL('image/webp'),
-                    imageWidth: 450,
+                    imageWidth: 1024,
                     imageAlt: 'photobooth',
                     showCancelButton: true,
                     allowOutsideClick: false,
@@ -296,6 +334,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                         if (arr_pic.length == max_picture) {
                             screenshot.setAttribute('disabled', '')
                             export_pic();
+                            sessionStorage.setItem('retry2export', 0); 
                             location.reload();
                         }
                     }
@@ -308,6 +347,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
 
         screenshot.onclick = doScreenshot;
 
+        // ฟังก์ชันเริ่มการสตรีมวิดีโอ
         const startStream = async (constraints) => {
             play.classList.add('d-none');
             nload.classList.add('d-none');
@@ -332,7 +372,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             document.body.style.background = "#fff";
         };
 
-
+        // ฟังก์ชันเลือกกล้อง
         const getCameraSelection = async () => {
             const devices = await navigator.mediaDevices.enumerateDevices();
             const videoDevices = devices.filter(device => device.kind === 'videoinput');
@@ -357,7 +397,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 buttonsStyling: false,
                 customClass: {
                     confirmButton: "button is-link pd-btn"
-                }
+                },
             }).then((result) => {
                 let od = document.getElementById('optionDevice');
                 if (result.isConfirmed) {
@@ -376,6 +416,8 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         //1280x3600
         // canvas_obj.width = imgobj_1.width*2;
         // canvas_obj.height = imgobj_1.height*2;
+
+        // กำหนดขนาดของแคนวาส
         canvas_obj.width = imgobj_1.width;
         canvas_obj.height = imgobj_1.height;
         ctx.fillStyle = "#000000";
@@ -389,6 +431,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         var count_a = 0;
         var export_status = false;
 
+        // ฟังก์ชันคำนวณอัตราส่วนภาพ
         function aspectRatio(img, x, y, w, h) {
             var aspectRatio = img.width / img.height;
             var newWidth, newHeight;
@@ -407,6 +450,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
             return [xOffset, yOffset, newWidth, newHeight]
         }
 
+        // Export
         if (sessionStorage['export']) {
             var data = JSON.parse(sessionStorage['export']);
             let del_start = document.getElementById('btn-start');
@@ -456,21 +500,107 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                 countData++
             });
 
-            imgs = canvas_obj.toDataURL("image/png");
+            function displayResult(picId, imgs) {
+                Swal.fire({
+                    title: '',
+                    html: `
+                                        <p>จะปิดในอีก <b>0</b> วินาที.</p>
+                                        <br>
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <figure class="m-0 mx-auto">
+                                                <img src="${imgs}" alt="" width="250px">
+                                            </figure>
+                                            <div class="position-absolute top-10 start-50 translate-middle card p-3 bg-light rounded shadow">
+                                                <div id="qrcode" class="v-loading="PanoramaInfo.bgenerateing">
+                                                    <!-- QR Code will be generated here -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                `,
+                    timer: 120000,
+                    /* showConfirmButton: true, */
+                    confirmButtonText: 'Refresh',
+                    showDenyButton: true,
+                    denyButtonText: 'Close',
+                    allowOutsideClick: false,
+                    allowEscapeKey: false,
+                    /* timerProgressBar: true, */
+                    didOpen: () => {
+                        /* Swal.showLoading() */
+                        const b = Swal.getHtmlContainer().querySelector('b')
+                        let qrcode = new QRCode(document.getElementById("qrcode"), {
+                            text: "<?= ENPOINT_URL_DOWNLOAD ?>/download.php?id=" + picId,
+                            width: 150,
+                            height: 150,
+                            colorDark: "#363636",
+                            colorLight: "#f5f5f5",
+                            correctLevel: QRCode.CorrectLevel.L
+                        });
+                        timerInterval = setInterval(() => {
+                            b.textContent = Math.round(Swal.getTimerLeft() / 1000);
+                            if (count_a > 1) {
+                                count_a = 0;
 
-            if (bg_size >= imgs.length) {
+                                // QRCODE Check - เมื่อแสกน qrcode แล้วจะลบ cache รูปและเริ่มใหม่
+                                $.ajax({
+                                    type: "GET",
+                                    url: "download.php?checksession=" + picId,
+                                    success: async (respc) => {
+                                        let resc = JSON.parse(respc);
+                                        if (resc['status'] == 'success') {
+                                            // ล้างข้อมูล cache รูปที่ถ่ายทั้งหมด
+                                            sessionStorage.removeItem('export');
+                                            sessionStorage.removeItem('picId');
+
+                                            Swal.increaseTimer(-999999)
+                                            await delay(5000);
+                                            location.reload();
+                                        }
+                                    }
+                                });
+
+                            }
+                            count_a++;
+                        }, 1000)
+                    },
+                    willClose: () => {
+                        clearInterval(timerInterval);
+                    }
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        location.reload();
+                    } else if (result.dismiss === Swal.DismissReason.timer || result.isDenied) {
+                        // ล้างข้อมูล cache รูปที่ถ่ายทั้งหมด
+                        sessionStorage.removeItem('export');
+                        sessionStorage.removeItem('picId');
+                        location.reload();
+                    }
+                })
+            }
+
+            // ส่งออกรูปเป็นและสร้าง QRCODE
+            imgs = canvas_obj.toDataURL("image/png");
+            if (bg_size >= imgs.length && (sessionStorage['retry2export'] && sessionStorage['retry2export'] < 3)) {
+                sessionStorage.setItem('retry2export', sessionStorage['retry2export']++); 
                 location.reload();
             } else {
+                sessionStorage.removeItem('retry2export');
                 export_status = true;
-                sessionStorage.removeItem('export');
                 del_start.classList.remove('d-none');
                 imgs = canvas_obj.toDataURL("image/png");
+                
+                picId = ''
+                if (sessionStorage['picId']) {
+                    picId = sessionStorage['picId']
+                }
+
                 $.ajax({
                     type: "POST",
                     url: "export.php",
                     data: {
                         export: '',
-                        data: imgs
+                        data: imgs,
+                        id: picId
                     },
                     beforeSend: (e) => {
                         let xloading = document.getElementById('wl');
@@ -484,78 +614,26 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                         console.log('done.');
                         let res = JSON.parse(resp);
                         if (res['status'] == "success") {
-                            Swal.fire({
-                                title: '',
-                                html: `
-                                        <p>จะปิดในอีก <b>0</b> วินาที.</p>
-                                        <br>
-                                        <div class="d-flex justify-content-center align-items-center">
-                                            <figure class="m-0">
-                                                <img src="${imgs}" alt="" width="250px">
-                                            </figure>
-                                                <div class="position-absolute top-10 start-50 translate-middle card p-3 bg-light rounded shadow">
-                                                    <div id="qrcode" class="v-loading="PanoramaInfo.bgenerateing">
-                                                        <!-- QR Code will be generated here -->
-                                                    </div>
-                                                </div>
-                                        </div>
-                                `,
-                                timer: 120000,
-                                showConfirmButton: false,
-                                allowOutsideClick: false,
-                                allowEscapeKey: false,
-                                timerProgressBar: true,
-                                didOpen: () => {
-                                    Swal.showLoading()
-                                    const b = Swal.getHtmlContainer().querySelector('b')
-                                    let qrcode = new QRCode(document.getElementById("qrcode"), {
-                                        text: "<?= ENPOINT_URL_DOWNLOAD ?>/download.php?id=" + res['msg'],
-                                        width: 150,
-                                        height: 150,
-                                        colorDark: "#363636",
-                                        colorLight: "#f5f5f5",
-                                        correctLevel: QRCode.CorrectLevel.L
-                                    });
-                                    timerInterval = setInterval(() => {
-                                        b.textContent = Math.round(Swal.getTimerLeft() / 1000);
-                                        if (count_a > 1) {
-                                            count_a = 0;
-                                            $.ajax({
-                                                type: "GET",
-                                                url: "download.php?checksession=" + res['msg'],
-                                                success: async (respc) => {
-                                                    let resc = JSON.parse(respc);
-                                                    if (resc['status'] == 'success') {
-                                                        Swal.increaseTimer(-999999)
-                                                        await delay(5000);
-                                                        location.reload();
-                                                    }
-                                                }
-                                            });
-                                        }
-                                        count_a++;
-                                    }, 1000)
-                                },
-                                willClose: () => {
-                                    clearInterval(timerInterval);
-                                }
-                            }).then((result) => {
-                                if (result.dismiss === Swal.DismissReason.timer) {
-                                    location.reload();
-                                }
-                            })
+
+                            // บันทึกรหัสรูปภาพ
+                            sessionStorage.setItem('picId', res['msg']);
+                            displayResult(res['msg'], imgs);
+
                         } else {
                             console.log("error");
                         }
-
                     }
                 });
+                
             }
         }
 
         function export_pic() {
             var jsonString = JSON.stringify(arr_pic);
             sessionStorage.removeItem('export');
+            if (sessionStorage['picId']) {
+                sessionStorage.removeItem('picId');
+            }
             sessionStorage.setItem('export', jsonString);
         }
 
@@ -570,11 +648,11 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
         }
     </script>
     <script>
-        window.onload = function () {
-            document.addEventListener("contextmenu", function (e) {
+        window.onload = function() {
+            document.addEventListener("contextmenu", function(e) {
                 e.preventDefault();
             }, false);
-            document.addEventListener("keydown", function (e) {
+            document.addEventListener("keydown", function(e) {
                 if (e.ctrlKey && e.shiftKey && e.keyCode == 73) {
                     disabledEvent(e);
                 }
@@ -591,6 +669,7 @@ $base64 = 'data:image/' . $type . ';base64,' . base64_encode($data);
                     disabledEvent(e);
                 }
             }, false);
+
             function disabledEvent(e) {
                 if (e.stopPropagation) {
                     e.stopPropagation();

@@ -9,9 +9,11 @@ if (isset($_GET['logout'])) {
     header("Location: login.php");
 }
 
-if (!isset($_SESSION['userid']) || $_SESSION['userid'] != 'admin'){
+if (!isset($_SESSION['userid']) || $_SESSION['userid'] != 'admin') {
     header('Location: login.php');
 }
+
+include('../config.php');
 
 if (isset($_GET['download'])) {
     require_once 'zipclass.php';
@@ -51,6 +53,7 @@ foreach ($images as $img) {
     $new_images[filemtime($img)] = $img;
 }
 krsort($new_images);
+
 ?>
 <!DOCTYPE html>
 <html lang="th">
@@ -93,33 +96,62 @@ krsort($new_images);
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <?php foreach ($new_images as $image): ?>
-                <div class="bg-gray-800 rounded-lg overflow-hidden shadow-lg relative">
-                    <a href="<?= ENPOINT_URL_DOWNLOAD . "/download.php?id=" . basename($image, ".png") ?>">
-                        <img class="lazyload w-full h-auto" src="<?= htmlspecialchars($image) ?>" alt="Image">
-                        <div class="absolute top-40 left-1/2 transform -translate-x-1/2 card p-3 bg-white rounded-lg shadow-lg">
-                            <div id="qrcode-<?= htmlspecialchars(basename($image, ".png")) ?>" v-loading="PanoramaInfo.bgenerateing">
-                                <!-- QR Code will be generated here -->
-                            </div>
-                        </div>
-
-                    </a>
+                <div data-qrcode="qrcode-<?= htmlspecialchars(basename($image, ".png")) ?>" data-link="<?= ENPOINT_URL_DOWNLOAD ?>/download.php?id=<?= basename($image, ".png") ?>" id="showImageButton" class="bg-gray-800 rounded-lg overflow-hidden shadow-lg relative" style="width: 75%;">
+                    <img class="lazyload w-full h-auto" src="<?= htmlspecialchars($image) ?>" alt="Image">
+                    <div id="qrcode-<?= htmlspecialchars(basename($image, ".png")) ?>" class="hidden" v-loading="PanoramaInfo.bgenerateing">
+                        <!-- QR Code will be generated here -->
+                    </div>
                     <div class="p-4 text-center">
                         <small><?= htmlspecialchars(basename($image, ".png")) ?></small>
                     </div>
                 </div>
                 <script>
                     new QRCode(document.getElementById("qrcode-<?= htmlspecialchars(basename($image, ".png")) ?>"), {
-                        text: "<?= htmlspecialchars($_SERVER["REQUEST_SCHEME"] . "://" . $_SERVER["HTTP_HOST"] . "/download.php?id=" . basename($image, ".png")) ?>",
-                        width: 150,
-                        height: 150,
-                        colorDark: "#ffffff",
-                        colorLight: "#000000",
+                        text: "<?= ENPOINT_URL_DOWNLOAD ?>/download.php?id=<?= basename($image, ".png") ?>",
+                        width: 450,
+                        height: 450,
+                        colorDark: "#363636",
+                        colorLight: "#f5f5f5",
                         correctLevel: QRCode.CorrectLevel.L
                     });
                 </script>
             <?php endforeach; ?>
         </div>
     </div>
+
+    <!-- Modal structure for image display -->
+    <div id="imageModal" class="fixed inset-0 bg-gray-800 bg-opacity-75 flex items-center justify-center hidden">
+        <div class="bg-white p-4 rounded relative max-w-lg mx-auto">
+            <img id="modalImage" src="" alt="QR Code" class="max-w-full max-h-screen">
+
+            <!-- Footer with buttons -->
+            <footer class="mt-4 flex justify-center space-x-4">
+                <a id="downloadButton" class="px-4 py-2 bg-indigo-500 text-white rounded">Download</a>
+                <button id="closeModalButton" class="px-4 py-2 bg-gray-600 text-white rounded">Close</button>
+            </footer>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#showImageButton').on('click', function() {
+                qrcodeid = $(this).data('qrcode')
+                qrcodeLink = $(this).data('link')
+                image = $('#' + qrcodeid + ' > img')[0].currentSrc
+   
+                $('#downloadButton').attr('href', qrcodeLink)
+                $('#modalImage').attr('src', image);
+                $('#imageModal').removeClass('hidden');
+            });
+
+            $('#closeModalButton').on('click', function() {
+                $('#imageModal').addClass('hidden');
+            });
+
+        });
+
+    </script>
     <script>
         document.querySelectorAll("img.lazyload").forEach(img => img.classList.add('lazy'));
         document.getElementById('menu-toggle').addEventListener('click', () => {

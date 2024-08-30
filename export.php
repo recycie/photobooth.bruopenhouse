@@ -18,8 +18,14 @@ function guidv4($data){
 
 if(isset($_POST['export'])){
     $data = $_POST['data'];
+    $picid = $_POST['id'];
     $img = substr(explode(";",$data)[1], 7);
-    $uuid = guidv4(openssl_random_pseudo_bytes(16));
+    if ($picid == ""){
+        $uuid = guidv4(openssl_random_pseudo_bytes(16));
+    }else{
+        $uuid = $picid;
+    }
+
     if(file_put_contents("uptmp/".$uuid.".png", base64_decode($img))){
         echo msg("success", "$uuid");
         exit;
