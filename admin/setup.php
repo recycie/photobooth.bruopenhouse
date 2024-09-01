@@ -108,7 +108,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <script>
-        $(document).ready(function () {
+        $(document).ready(function() {
             <?php if ($config != null): ?>
                 var savedConfig = <?= json_encode($config) ?>;
             <?php else: ?>
@@ -176,23 +176,23 @@ $config = loadConfig(CONFIGFILE_ADMIN);
 
             function startCamera() {
                 navigator.mediaDevices.getUserMedia({
-                    video: true,
-                    deviceId: {
-                        exact: camera_device
-                    }
-                })
-                    .then(function (stream) {
+                        video: true,
+                        deviceId: {
+                            exact: camera_device
+                        }
+                    })
+                    .then(function(stream) {
                         cameraStream = stream;
                         video.srcObject = stream; // Set the video source to the stream
                     })
-                    .catch(function (error) {
+                    .catch(function(error) {
                         console.error('Error accessing camera: ', error);
                     });
             }
 
             function stopCamera() {
                 if (cameraStream) {
-                    cameraStream.getTracks().forEach(function (track) {
+                    cameraStream.getTracks().forEach(function(track) {
                         track.stop(); // Stop each track
                     });
                     video.srcObject = null; // Remove the stream from the video element
@@ -202,6 +202,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
 
             function captureCamera() {
                 var context = canvas.getContext('2d');
+
                 if (video.readyState === video.HAVE_ENOUGH_DATA) {
                     canvas.width = video.videoWidth;
                     canvas.height = video.videoHeight;
@@ -209,25 +210,55 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                     context.drawImage(video, 0, 0, canvas.width, canvas.height);
 
                     var dataURL = canvas.toDataURL('image/png');
-                    return dataURL
+                    return dataURL;
                 } else {
                     console.error('Video is not ready for capture.');
                 }
-            };
+            }
 
+            function waitForCameraReady(callback) {
+                let isCameraReady = false;
 
-            $('#frameImage').on('change', function (event) {
+                const timeout = setTimeout(function() {
+                    if (!isCameraReady) {
+                        console.error('Camera did not become ready within 3 seconds.');
+                    }
+                }, 3000); // 5 seconds timeout
+
+                video.addEventListener('loadedmetadata', function() {
+                    clearTimeout(timeout);
+                    isCameraReady = true;
+                    console.log('Camera is ready.');
+                    callback();
+                }, {
+                    once: true
+                });
+
+                video.addEventListener('error', function() {
+                    clearTimeout(timeout);
+                    console.error('Failed to load the video stream.');
+                }, {
+                    once: true
+                });
+            }
+
+            $('#frameImage').on('change', function(event) {
                 var file = event.target.files[0];
                 if (file) {
                     var reader = new FileReader();
 
-                    reader.onload = function (e) {
+                    reader.onload = function(e) {
                         frameBG.src = e.target.result
-
                         $('#photo-booth-frame').css('background-image', 'url(' + e.target.result + ')');
-                        startCamera();
-                        setupFrame()
-                        renderBG()
+                        startCamera()
+
+                        waitForCameraReady(function() {
+                            var capturedImage = captureCamera();
+                            if (capturedImage) {
+                                setupFrame()
+                                renderBG()
+                            }
+                        });
                     };
 
                     reader.readAsDataURL(file);
@@ -242,20 +273,18 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                 canvas_obj.classList.add('d-none');
                 ctx = canvas_obj.getContext("2d");
 
-                frameimg.onload = function () {
+                frameimg.onload = function() {
                     canvas_obj.width = frameimg.width;
                     canvas_obj.height = frameimg.height;
-                }
 
+                    updateConfig()
+                }
             }
 
-
-            function drawImage(url, x, y, w, h) {
+            function drawImage(x, y, w, h) {
                 var img = new Image();
                 img.src = captureCamera();
-                img.onload = function () {
-                    ctx.drawImage(frameimg, 0, 0, canvas_obj.width, canvas_obj.height);
-
+                img.onload = function() {
                     var aspectRatio = img.width / img.height;
                     var newWidth, newHeight;
 
@@ -277,7 +306,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
 
             function setupFrame() {
                 var img = new Image();
-                img.onload = function () {
+                img.onload = function() {
                     frameSize.width = img.width;
                     frameSize.height = img.height;
                     $('#photo-booth-frame').css({
@@ -308,17 +337,14 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                                 containment: "#photo-booth-frame",
                                 stop: updateConfig
                             });
-                            newRectangle.click(function () {
+                            newRectangle.click(function() {
                                 $('.photo-area').removeClass('selected');
                                 $(this).addClass('selected');
                             });
                         }
                     }
-
-                    updateConfig();
                 };
                 img.src = frameBG.src
-
             }
 
             function addRectangle() {
@@ -341,7 +367,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                     stop: updateConfig
                 });
 
-                newRectangle.click(function () {
+                newRectangle.click(function() {
                     $('.photo-area').removeClass('selected');
                     $(this).addClass('selected');
                 });
@@ -375,7 +401,8 @@ $config = loadConfig(CONFIGFILE_ADMIN);
 
             function updateConfig() {
                 let config = {};
-                $('.photo-area').each(function () {
+                ctx.drawImage(frameimg, 0, 0, canvas_obj.width, canvas_obj.height);
+                $('.photo-area').each(function() {
                     let $this = $(this);
                     let position = $this.position();
 
@@ -385,14 +412,14 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                         width: $this.width(),
                         height: $this.height()
                     };
-                    drawImage('test2.png', position.left, position.top, $this.width(), $this.height());
+                    drawImage(position.left, position.top, $this.width(), $this.height());
                 });
             }
 
-            $('#saveConfig').click(function () {
+            $('#saveConfig').click(function() {
                 let config = {};
 
-                $('.photo-area').each(function () {
+                $('.photo-area').each(function() {
                     let $this = $(this);
                     let position = $this.position();
                     if (position.top != 0 && position.left != 0 && $this.width() != 0 && $this.height() != 0) {
@@ -424,7 +451,7 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                 if (frameImage) {
                     var img = new Image();
                     img.crossOrigin = 'Anonymous'; // Handle cross-origin images if necessary
-                    img.onload = function () {
+                    img.onload = function() {
                         var canvas = document.createElement('canvas');
                         var ctx = canvas.getContext('2d');
                         canvas.width = img.width;
@@ -435,17 +462,17 @@ $config = loadConfig(CONFIGFILE_ADMIN);
                         // Send the configuration and image data to the server
                         $.post('', {
                             config: JSON.stringify(config)
-                        }).done(function (response) {
+                        }).done(function(response) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'DONE',
+                                title: 'Done',
                                 showCancelButton: false,
                                 allowOutsideClick: false,
                                 allowEscapeKey: false,
                                 confirmButtonText: 'ยืนยัน',
                             });
                             console.log("Configuration saved:", response);
-                        }).fail(function (jqXHR, textStatus, errorThrown) {
+                        }).fail(function(jqXHR, textStatus, errorThrown) {
                             console.error("Request failed:", textStatus, errorThrown);
                         });
                     };
@@ -465,7 +492,6 @@ $config = loadConfig(CONFIGFILE_ADMIN);
 
 
         });
-
     </script>
 
 </body>

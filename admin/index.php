@@ -96,7 +96,7 @@ krsort($new_images);
         </div>
         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
             <?php foreach ($new_images as $image): ?>
-                <div data-qrcode="qrcode-<?= htmlspecialchars(basename($image, ".png")) ?>" data-link="<?= ENPOINT_URL_DOWNLOAD ?>/download.php?id=<?= basename($image, ".png") ?>" id="showImageButton" class="bg-gray-800 rounded-lg overflow-hidden shadow-lg relative" style="width: 75%;">
+                <div data-qrcode="qrcode-<?= htmlspecialchars(basename($image, ".png")) ?>" data-link="<?= ENPOINT_URL_DOWNLOAD ?>/download.php?id=<?= basename($image, ".png") ?>" class="showImageButton bg-gray-800 rounded-lg overflow-hidden shadow-lg relative" style="width: 75%;">
                     <img class="lazyload w-full h-auto" src="<?= htmlspecialchars($image) ?>" alt="Image">
                     <div id="qrcode-<?= htmlspecialchars(basename($image, ".png")) ?>" class="hidden" v-loading="PanoramaInfo.bgenerateing">
                         <!-- QR Code will be generated here -->
@@ -135,7 +135,7 @@ krsort($new_images);
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#showImageButton').on('click', function() {
+            $('.showImageButton').on('click', function() {
                 qrcodeid = $(this).data('qrcode')
                 qrcodeLink = $(this).data('link')
                 image = $('#' + qrcodeid + ' > img')[0].currentSrc
